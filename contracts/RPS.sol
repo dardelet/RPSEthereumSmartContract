@@ -3,36 +3,41 @@ pragma solidity ^0.4.22;
 contract RPS {
   address public creator; // Player One
   address public guest; // Player Two
-  mapping (string => uint8) private validMoves;
-  mapping (address => string) private playedMoves;
+  mapping (string => uint8) private moveToIndex;
+  mapping (address => uint8) private playedMoves;
 
   modifier onlyCreator() {
     require(msg.sender == creator);
     _;
   }
 
-  /*modifier onlyCreatorOrGuest() {
-    require(msg.sender == creator or msg.sender == guest);
+  modifier onlyCreatorOrGuest() {
+    require(msg.sender == creator || msg.sender == guest);
     _;
-  }*/
+  }
 
   constructor() public {
     creator = msg.sender;
-    validMoves['R'] = 0;
-    validMoves['P'] = 1;
-    validMoves['S'] = 2;
+    moveToIndex['Rock'] = 1;
+    moveToIndex['Paper'] = 2;
+    moveToIndex['Scissor'] = 3;
   }
 
   function inviteGuest(address _guest) external onlyCreator {
     guest = _guest;
   }
 
-  function play(string move) external returns (uint) {//onlyCreatorOrGuest {
-    uint validMove = validMoves[move];
-    return validMove;
-    //playedMoves[msg.sender] = 
+  function play(string move) external onlyCreatorOrGuest {
+    uint8 index = moveToIndex[move];
+    require(index > 0, 'Move was not found');
+    require(playedMoves[msg.sender] == 0, 'A move was already played by the player');
+    playedMoves[msg.sender] = index;
   }
 
-  function getWinner() public {
-  }
+
+  /*function getWinner() external onlyCreatorOrGuest returns (uint8) {
+    uint8 moveCreator = playedMoves[creator];
+    uint8 moveGuest = playedMoves[guest];
+    require(moveCreator > 0 && playedMoves[guest] > 0);
+  }*/
 }
