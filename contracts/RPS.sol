@@ -34,10 +34,11 @@ contract RPS {
     playedMoves[msg.sender] = index;
   }
 
-
-  /*function getWinner() external onlyPlayers returns (uint8) {
+  // Returns 0 if draw, 1 if playerOne wins, or 2 if playerTwo wins
+  function getWinner() external onlyPlayers returns (uint8) {
     uint8 movePlayerOne = playedMoves[playerOne];
     uint8 movePlayerTwo = playedMoves[playerTwo];
-    require(moveplayerOne > 0 && playedMoves[playerTwo] > 0);
-  }*/
+    require(movePlayerOne > 0 && movePlayerTwo > 0);
+    return (3 + movePlayerOne - movePlayerTwo) % 3;
+  }
 }

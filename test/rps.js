@@ -43,11 +43,22 @@ contract('RPS', accounts => {
     });
   });
 
-  /*
-  it('lol', async () => {
+  it('getWinner method should compute the winner', async () => {
     await rps.play('Rock', {from: playerOne});
-    await rps.play('Paper', {from: playerTwo});
-    console.log(await rps.getWinner.call());
-  })*/
+    await rps.play('Scissor', {from: playerTwo});
+    assert((await rps.getWinner.call() ) == 1); // playerOne wins
+
+    rps = await RPS.new({from: playerOne});
+    await rps.invitePlayerTwo(playerTwo, {from: playerOne});
+    await rps.play('Rock', {from: playerOne});
+    await rps.play('Rock', {from: playerTwo});
+    assert((await rps.getWinner.call()) == 0); // Draw
+
+    rps = await RPS.new({from: playerOne});
+    await rps.invitePlayerTwo(playerTwo, {from: playerOne});
+    await rps.play('Paper', {from: playerOne});
+    await rps.play('Scissor', {from: playerTwo});
+    assert((await rps.getWinner.call()) == 2); // playerTwo wins
+  })
 });
 
