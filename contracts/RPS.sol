@@ -1,8 +1,8 @@
 pragma solidity ^0.4.22;
 
 contract RPS {
-  address public playerOne; // Player One
-  address public playerTwo; // Player Two
+  address public playerOne;
+  address public playerTwo;
   mapping (string => uint8) private moveToIndex;
   mapping (address => uint8) private playedMoves;
 

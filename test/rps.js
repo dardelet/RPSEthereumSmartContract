@@ -17,33 +17,40 @@ contract('RPS', accounts => {
   });
 
   it('play method should store moves of the players', async () => {
+    // Those lines below test that the following smart contract call
+    // will fail with invalid parameters. If it does fail, the exception
+    // will be caught and execution continues normally. If it does not
+    // fail (as it should) the assert(false) will make the test itself fail
+    try {
+      await rps.play('InvalidMove', {from: playerOne});
+      assert(false);
+    } catch(e) {
+      if (e.name == 'AssertionError')
+        assert(false, 'player should be able to play only valid move');
+    }
 
-    /*rps.play('InvalidMove', {from: playerOne}).then(() => assert(false))
-
-    it('player should not be able to play an invalid move', async () => {
-      console.log('lol');
-    });*/
-    //Lookup Error: VM Exception while processing transaction: revert
-
-    it('player should be able to play only one move', async () => {
+    await rps.play('Rock', {from: playerOne});
+    try {
       await rps.play('Rock', {from: playerOne});
-      try {
-        await rps.play('Rock', {from: playerOne});
-        assert(false);
-      } catch(e) {}
-    });
+      assert(false);
+    } catch(e) {
+      if (e.name == 'AssertionError')
+        assert(false, 'player should be able to play only one move');
+    }
 
-    it('only players should be able to play a move', async () => {
-      await rps.play('Paper', {from: playerTwo});
-      try {
-        await rps.play('Paper', {from: accounts[3]});
-        assert(false);
-      }
-      catch (e) {console.log(e)}
-    });
+    try {
+      await rps.play('Paper', {from: accounts[2]});
+      assert(false);
+    } catch(e) {
+      if (e.name == 'AssertionError')
+        assert(false, 'only registered players should be able to play a move');
+    }
   });
 
   it('getWinner method should compute the winner', async () => {
+    const DRAW = 0;
+    const PLAYER1 = 1;
+    const PLAYER2 = 2;
 
     async function getWinnerOfGame(movePlayerOne, movePlayerTwo) {
       rps = await RPS.new({from: playerOne});
@@ -53,15 +60,15 @@ contract('RPS', accounts => {
       return rps.getWinner.call();
     }
 
-    assert((await getWinnerOfGame('Rock', 'Rock')).toNumber() === 0);
-    assert((await getWinnerOfGame('Rock', 'Paper')).toNumber() === 2);
-    assert((await getWinnerOfGame('Rock', 'Scissor')).toNumber() === 1);
-    assert((await getWinnerOfGame('Paper', 'Rock')).toNumber() === 1);
-    assert((await getWinnerOfGame('Paper', 'Paper')).toNumber() === 0);
-    assert((await getWinnerOfGame('Paper', 'Scissor')).toNumber() === 2);
-    assert((await getWinnerOfGame('Scissor', 'Rock')).toNumber() === 2);
-    assert((await getWinnerOfGame('Scissor', 'Paper')).toNumber() === 1);
-    assert((await getWinnerOfGame('Scissor', 'Scissor')).toNumber() === 0);
+    assert((await getWinnerOfGame('Rock', 'Rock')).toNumber() === DRAW);
+    assert((await getWinnerOfGame('Rock', 'Paper')).toNumber() === PLAYER2);
+    assert((await getWinnerOfGame('Rock', 'Scissor')).toNumber() === PLAYER1);
+    assert((await getWinnerOfGame('Paper', 'Rock')).toNumber() === PLAYER1);
+    assert((await getWinnerOfGame('Paper', 'Paper')).toNumber() === DRAW);
+    assert((await getWinnerOfGame('Paper', 'Scissor')).toNumber() === PLAYER2);
+    assert((await getWinnerOfGame('Scissor', 'Rock')).toNumber() === PLAYER2);
+    assert((await getWinnerOfGame('Scissor', 'Paper')).toNumber() === PLAYER1);
+    assert((await getWinnerOfGame('Scissor', 'Scissor')).toNumber() === DRAW);
   });
 });
 
