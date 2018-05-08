@@ -1,6 +1,10 @@
 # RPSEthereumSmartContract
 A solidity smart contract to play Rock Paper Scissor on the Ethereum Blockchain
 
+Contract code is in `contracts/RPS.sol`
+
+Tests are in `test/RPS.js`
+
 # How to play
 
 Instantiate the contract and invite another player with `invitePlayerTwo`.
@@ -28,3 +32,9 @@ In order to play the secured version, players need to:
 After the first player submits their move, the second player will not be able to see it, and can't guess it unless they know the secret random string of the first player.
 
 After both player have submitted their encrypted move, they need to submit their secret with `submitSecret` so that the contract can reveal their moves, and get the winner with the `getWinner` function.
+
+# How to run tests
+
+All the calls necessary to play a game are detailed in `test/RPS.js`.
+
+To run these tests, call `truffle develop` from the root of the project and type `test` in the console
