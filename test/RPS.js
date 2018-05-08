@@ -16,7 +16,7 @@ contract('RPS', accounts => {
     assert((await rps.playerTwo.call()) === playerTwo, 'playerTwo address not set');
   });
 
-  it('play method should store moves of the players', async () => {
+  it('play should store moves of the players', async () => {
     // This try/catch will test that the RPS smart contract call
     // will fail with invalid parameters. If it does fail, the exception
     // will be caught and execution continues normally. If it does not
@@ -47,7 +47,7 @@ contract('RPS', accounts => {
     }
   });
 
-  it('getWinner method should compute the winner', async () => {
+  it('getWinner should compute the winner', async () => {
     const DRAW = 0;
     const PLAYER1 = 1;
     const PLAYER2 = 2;
