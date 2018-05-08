@@ -45,7 +45,7 @@ contract RPS {
   }
 
   // Returns 0 if draw, 1 if playerOne wins, or 2 if playerTwo wins
-  function getWinner() external onlyPlayers returns (uint8) {
+  function getWinner() external view onlyPlayers returns (uint8) {
     uint8 movePlayerOne = playedMoves[playerOne];
     uint8 movePlayerTwo = playedMoves[playerTwo];
     require(movePlayerOne > 0 && movePlayerTwo > 0);
@@ -69,7 +69,7 @@ contract RPS {
   }
 
   // From https://ethereum.stackexchange.com/questions/729/how-to-concatenate-strings-in-solidity#1203
-  function strConcat(string _a, string _b) internal returns (string) {
+  function strConcat(string _a, string _b) internal pure returns (string) {
     bytes memory _ba = bytes(_a);
     bytes memory _bb = bytes(_b);
     string memory ab = new string(_ba.length + _bb.length);
